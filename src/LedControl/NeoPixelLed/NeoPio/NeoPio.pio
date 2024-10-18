@@ -1,0 +1,38 @@
+.program neopio
+
+.wrap_target
+    pull
+    out null, 8
+next_bit:
+    out x, 1
+    jmp !x, bit_0
+    mov pins, !null [15]
+    mov pins, null [4]
+    jmp bit_end
+bit_0:
+    mov pins, !null [7]  ; 8 cycles = 400ns on
+    mov pins, null[13]  ; 14 + 3 cycles = 850 off
+bit_end:
+    jmp !osre next_bit
+.wrap
+
+
+% c-sdk {
+#include "hardware/clocks.h"
+
+static inline void neopio_program_init(PIO pio, uint sm, uint offset, uint pin) {
+
+    pio_sm_config c = neopio_program_get_default_config(offset);
+    sm_config_set_out_shift(&c, false, false, 32);
+    float freq = 20e6; // 20Mhz => 50ns
+    sm_config_set_clkdiv(&c, clock_get_hz(clk_sys) / freq);    // 20Mhz => 50ns
+    sm_config_set_out_pins(&c, pin, 1);
+    sm_config_set_sideset_pins(&c, pin);
+
+    pio_gpio_init(pio, pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+%}
