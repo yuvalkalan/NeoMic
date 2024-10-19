@@ -16,8 +16,8 @@
 // ---------------------------------------------------------------------------
 // default settings configuration (percents from max)
 #define DEF_MAX_BRIGHT 20
-#define DEF_SENSITIVITY 30
-#define DEF_VOLUME_THRESHOLD 70
+#define DEF_SENSITIVITY 4
+#define DEF_VOLUME_THRESHOLD 1
 // ---------------------------------------------------------------------------
 // settings file contant offsets
 #define SETTINGS_EXIST_OFFSET 0

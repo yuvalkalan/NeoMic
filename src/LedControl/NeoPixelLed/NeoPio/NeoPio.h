@@ -7,7 +7,7 @@
 #define NUM_PIXELS 144
 #define LEDS_DMA_CHANNEL 0
 #define LEDS_SM 0
-#define LEDS_GPIO_PIN 3
+#define LEDS_GPIO_PIN 20
 
 class NeoPio
 {

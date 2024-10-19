@@ -50,7 +50,7 @@ void LedControl::update(UPDATE_PARAMS)
 void LedControl::update_sound_bar(UPDATE_PARAMS)
 {
     // right
-    int right_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * right_avg / 65535);
+    int right_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * right_max / 65535);
     right_value = right_value > (NUM_PIXELS / 2) ? (NUM_PIXELS / 2) : right_value;
     for (int i = 0; i < right_value; i++)
     {
@@ -58,7 +58,7 @@ void LedControl::update_sound_bar(UPDATE_PARAMS)
         pio.buffer[NUM_PIXELS / 2 - 1 - i] = (c << 8) | (settings.get_max_bright() - c);
     }
     // left
-    int left_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * left_avg / 65535);
+    int left_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * left_max / 65535);
     // printf("left value is %d", left_value);
     left_value = left_value > (NUM_PIXELS / 2) ? (NUM_PIXELS / 2) : left_value;
     for (int i = 0; i < left_value; i++)

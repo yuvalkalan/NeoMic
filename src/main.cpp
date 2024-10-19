@@ -12,11 +12,13 @@
 
 #define LED_REFRESH_RATE 200    // 200.0 Hz
 #define READ_REFRESH_RATE 10000 // 10kHz
-#define GPIO_ANALOG_RIGHT 28    // aux right channel pin
-#define GPIO_ANALOG_LEFT 27     // aux left channel pin
-#define GPIO_CLK_PIN 1          // rotary clk pin
-#define GPIO_DT_PIN 2           // rotary dt pin
-#define GPIO_BUTTON_PIN 0       // rotary button pin
+#define GPIO_ANALOG_RIGHT 28    // microphone right pin
+#define GPIO_ANALOG_LEFT 27     // microphone left pin
+#define GPIO_CLK_PIN 17         // rotary clk pin
+#define GPIO_DT_PIN 18          // rotary dt pin
+#define GPIO_BUTTON_PIN 16      // rotary button pin
+
+#define MIC_BACKGOUND_VOLUME 35000
 
 AnalogRead analog_right(GPIO_ANALOG_RIGHT);
 AnalogRead analog_left(GPIO_ANALOG_LEFT);
@@ -69,9 +71,8 @@ void core0()
             printf("hold down!\n");
         }
         multicore_lockout_end_blocking(); // release lock
-
         led_ctrl.pio.wait_until_finish();
-        led_ctrl.update(right_avg, right_max, left_avg, left_max);
+        led_ctrl.update(right_avg - MIC_BACKGOUND_VOLUME, right_max - MIC_BACKGOUND_VOLUME, left_avg - MIC_BACKGOUND_VOLUME, left_max - MIC_BACKGOUND_VOLUME);
         led_ctrl.pio.write();
         if (clk.tick() > 0.1)
         {
