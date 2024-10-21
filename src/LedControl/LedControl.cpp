@@ -50,7 +50,9 @@ void LedControl::update(UPDATE_PARAMS)
 void LedControl::update_sound_bar(UPDATE_PARAMS)
 {
     // right
-    int right_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * right_max / 65535);
+    float right_precent = (float)(right_max - MIC_MIN_VOLUME) / (MIC_MAX_VOLUME - MIC_MIN_VOLUME); // right mic volume precent (number between 0 and 1)
+    printf("%d\n", right_max);
+    int right_value = (settings.get_sensitivity() * right_precent * (NUM_PIXELS / 2)); // sensitivity (0-MAX_SENSITIVITY) * right_precent (0-1) * (NUM_PIXELS / 2)
     right_value = right_value > (NUM_PIXELS / 2) ? (NUM_PIXELS / 2) : right_value;
     for (int i = 0; i < right_value; i++)
     {
@@ -58,8 +60,8 @@ void LedControl::update_sound_bar(UPDATE_PARAMS)
         pio.buffer[NUM_PIXELS / 2 - 1 - i] = (c << 8) | (settings.get_max_bright() - c);
     }
     // left
-    int left_value = (settings.get_sensitivity() * (NUM_PIXELS / 2) * left_max / 65535);
-    // printf("left value is %d", left_value);
+    float left_precent = (float)(left_max - MIC_MIN_VOLUME) / (MIC_MAX_VOLUME - MIC_MIN_VOLUME); // left mic volume precent (number between 0 and 1)
+    int left_value = (settings.get_sensitivity() * left_precent * (NUM_PIXELS / 2));             // sensitivity (0-MAX_SENSITIVITY) * right_precent (0-1) * (NUM_PIXELS / 2)
     left_value = left_value > (NUM_PIXELS / 2) ? (NUM_PIXELS / 2) : left_value;
     for (int i = 0; i < left_value; i++)
     {

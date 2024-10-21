@@ -57,10 +57,6 @@ void SerialIn::set_command(Settings &settings, const std::string &param, int val
         m_show_overloading = value ? true : false;
         printf("set %s = %d", PARAM_OVERLOADING, m_show_overloading);
     }
-    else if (param == PARAM_MACHINE_VOLUME)
-    {
-        settings.set_machine_volume(value);
-    }
     else
     {
         printf("Invalid set command!\n");

@@ -8,7 +8,7 @@ void enable_usb(bool enable)
 void enable_usb(bool enable) {}
 #endif
 
-Settings::Settings() : m_mode(Mode::SOUND_BAR), m_max_bright(DEF_MAX_BRIGHT), m_sensitivity(DEF_SENSITIVITY), m_volume_threshold(DEF_VOLUME_THRESHOLD), m_config_temp_value(0), m_machine_volume(100)
+Settings::Settings() : m_mode(Mode::SOUND_BAR), m_max_bright(DEF_MAX_BRIGHT), m_sensitivity(DEF_SENSITIVITY), m_volume_threshold(DEF_VOLUME_THRESHOLD), m_config_temp_value(0)
 {
     if (exist())
     {
@@ -77,24 +77,22 @@ uint8_t Settings::get_config_temp_value() const
 {
     return m_config_temp_value;
 }
-int Settings::get_volume_threshold() const
+float Settings::get_volume_threshold() const
 {
     // return volume threshold between 0 and MAX_VOLUME_THRESHOLD
     // return m_volume_threshold / 100.0f * MAX_VOLUME_THRESHOLD;
-
-    // TODO: fix to machine volume
-    return (m_volume_threshold / 100.0f) * MAX_VOLUME_THRESHOLD * std::pow((m_machine_volume / 100.0f), 2); // use the current machine volume. don't know why power 2 but it works (tested)
+    return (m_volume_threshold / 100.0f) * MAX_VOLUME_THRESHOLD + MIC_MIN_VOLUME;
 }
 int Settings::get_max_bright() const
 {
     // return brightness between 0 and MAX_BRIGHTNESS
     return (m_max_bright / 100.0f) * MAX_BRIGHTNESS;
 }
-int Settings::get_sensitivity() const
+float Settings::get_sensitivity() const
 {
     // return sensitivity between 0 and MAX_SENSITIVITY
     // return m_sensitivity / 100.0f * MAX_SENSITIVITY;
-    return (m_sensitivity / 100.0f) * MAX_SENSITIVITY * 100.0f / (m_machine_volume + 0.01); // use the current machine volume
+    return (m_sensitivity / 100.0f) * MAX_SENSITIVITY;
 }
 void Settings::set_config_temp_value(int value)
 {
@@ -114,8 +112,4 @@ void Settings::set_sensitivity(int value)
 {
     m_sensitivity = fix_percent(value);
     write();
-}
-void Settings::set_machine_volume(int value)
-{
-    m_machine_volume = value;
 }

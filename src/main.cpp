@@ -18,8 +18,6 @@
 #define GPIO_DT_PIN 18          // rotary dt pin
 #define GPIO_BUTTON_PIN 16      // rotary button pin
 
-#define MIC_BACKGOUND_VOLUME 35000
-
 AnalogRead analog_right(GPIO_ANALOG_RIGHT);
 AnalogRead analog_left(GPIO_ANALOG_LEFT);
 Rotary rotary(GPIO_CLK_PIN, GPIO_DT_PIN, GPIO_BUTTON_PIN);
@@ -32,7 +30,7 @@ void core0()
     Clock clk(LED_REFRESH_RATE);
     multicore_lockout_victim_init();
     int overloading_counter = 1;
-    led_ctrl.settings.update_mode();
+    // led_ctrl.settings.update_mode();
     while (true)
     {
         led.update();
@@ -72,7 +70,7 @@ void core0()
         }
         multicore_lockout_end_blocking(); // release lock
         led_ctrl.pio.wait_until_finish();
-        led_ctrl.update(right_avg - MIC_BACKGOUND_VOLUME, right_max - MIC_BACKGOUND_VOLUME, left_avg - MIC_BACKGOUND_VOLUME, left_max - MIC_BACKGOUND_VOLUME);
+        led_ctrl.update(right_avg, right_max, left_avg, left_max);
         led_ctrl.pio.write();
         if (clk.tick() > 0.1)
         {

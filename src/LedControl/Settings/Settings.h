@@ -5,26 +5,29 @@
 #include "hardware/flash.h"
 #include "hardware/sync.h"
 #include <cmath>
-// settings flash buffer location
+// mic configuration ----------------------------------------------------------
+#define MIC_MIN_VOLUME 34500 // remove this value from mic value
+#define MIC_MAX_VOLUME 65535
+// settings flash buffer location ---------------------------------------------
 #define SETTINGS_WRITE_START (PICO_FLASH_SIZE_BYTES - FLASH_SECTOR_SIZE)
 #define SETTINGS_READ_START (SETTINGS_WRITE_START + XIP_BASE)
-// ---------------------------------------------------------------------------
-// max settings configuration
-#define MAX_SENSITIVITY 100
+// ----------------------------------------------------------------------------
+// max settings configuration -------------------------------------------------
+#define MAX_SENSITIVITY 5
 #define MAX_BRIGHTNESS 255
-#define MAX_VOLUME_THRESHOLD 65535
-// ---------------------------------------------------------------------------
-// default settings configuration (percents from max)
-#define DEF_MAX_BRIGHT 20
-#define DEF_SENSITIVITY 4
-#define DEF_VOLUME_THRESHOLD 1
-// ---------------------------------------------------------------------------
-// settings file contant offsets
+#define MAX_VOLUME_THRESHOLD (MIC_MAX_VOLUME - MIC_MIN_VOLUME)
+// ----------------------------------------------------------------------------
+// default settings configuration (percents from max) -------------------------
+#define DEF_MAX_BRIGHT 80
+#define DEF_SENSITIVITY 20
+#define DEF_VOLUME_THRESHOLD 30
+// ----------------------------------------------------------------------------
+// settings file contant offsets ----------------------------------------------
 #define SETTINGS_EXIST_OFFSET 0
 #define SETTINGS_MAX_BRIGHT_OFFSET 1
 #define SETTINGS_SENSITIVITY_OFFSET 2
 #define SETTINGS_VOLUME_THRESHOLD_OFFSET 3
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 static const uint8_t *settings_flash_buffer = (const uint8_t *)SETTINGS_READ_START;
 void enable_usb(bool enable);
 enum Mode
@@ -57,7 +60,6 @@ private:
     uint8_t m_sensitivity;
     uint8_t m_volume_threshold;
     uint8_t m_config_temp_value;
-    uint8_t m_machine_volume;
 
 private:
     // file operation
@@ -70,9 +72,9 @@ public:
     // getters
     Mode get_mode() const;
     uint8_t get_config_temp_value() const;
-    int get_volume_threshold() const;
+    float get_volume_threshold() const;
     int get_max_bright() const;
-    int get_sensitivity() const;
+    float get_sensitivity() const;
     // setters
     void reset();
     void update_mode();
@@ -80,5 +82,4 @@ public:
     void set_volume_threshold(int value);
     void set_max_bright(int value);
     void set_sensitivity(int value);
-    void set_machine_volume(int value);
 };
