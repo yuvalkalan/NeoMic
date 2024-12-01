@@ -10,7 +10,7 @@
 #include "Rotary/Rotary.h"
 #include "SerialIn/SerialIn.h"
 
-#define LED_REFRESH_RATE 200    // 200.0 Hz
+#define LED_REFRESH_RATE 100    // 200.0 Hz
 #define READ_REFRESH_RATE 10000 // 10kHz
 #define GPIO_ANALOG_RIGHT 28    // microphone right pin
 #define GPIO_ANALOG_LEFT 27     // microphone left pin
